@@ -1,0 +1,17 @@
+{
+    "apps": [
+        {
+            "name": "rss.project",
+            "script": "server/index.js",
+            "instances": 1,
+            "exec_mode": "cluster_mode",
+            "out_file": "/home/cwb/logs/pm2/mall-c/out/out.log",
+            "error_file": "/home/cwb/logs/pm2/mall-c/error/error.log",
+            "merge_logs": true,
+            "env": {
+                "NODE_CONFIG_DIR": "./server/config",
+            }
+        }
+    ]
+}
+  
