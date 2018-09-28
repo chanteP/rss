@@ -9,5 +9,8 @@ export default new vuex.Store({
     modules: {
         content,
         sidebar,
-    }
+    },
+    state: {
+        mobileMode: window.innerWidth / window.innerHeight < 1,
+    },
 });

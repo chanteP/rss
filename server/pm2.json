@@ -9,7 +9,7 @@
             "error_file": "/home/cwb/logs/pm2/rss/error/error.log",
             "merge_logs": true,
             "env": {
-                "NODE_CONFIG_DIR": "./server/config",
+                "NODE_CONFIG_DIR": "./server/config"
             }
         }
     ]

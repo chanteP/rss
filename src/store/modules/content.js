@@ -3,6 +3,7 @@ export default {
     state: {
         list: [],
         url: null,
+        isLoading: true,
     },
     // getters,
     actions: {
@@ -11,12 +12,15 @@ export default {
         },
         showList({commit}, list){
             commit('setList', list);
+            commit('setLoading', false);
         },
         async fetchList({commit, dispatch}, source){
+            commit('setLoading', true);
             let list = await fetchResources(source);
             dispatch('showList', list);
         },
         async fetchAll({commit, dispatch}, sourceList){
+            commit('setLoading', true);
             let rs = await Promise.all(sourceList.map(l => fetchResources(l)));
             let list = rs.reduce((d, s) => d.concat(s), []);
             list.sort((a, b) => {
@@ -32,6 +36,9 @@ export default {
         setList(state, list){
             state.list = Array.isArray(list) ? list : [];
         },
+        setLoading(state, bool){
+            state.isLoading = !!bool;
+        },
     },
 }
 
@@ -41,7 +48,12 @@ async function fetchResources(source){
         return res.text();
     });
     rs = rs.replace(/\\/g, '\\\\');
-    let resInfo = JSON.parse(rs);
+    let resInfo = {items: []};
+    try{
+        resInfo = JSON.parse(rs);
+    }catch(e){
+        window.console.error(source, e);
+    }
     let list = resInfo.items || [];
     list.forEach(item => {
         item.from = resInfo.title;

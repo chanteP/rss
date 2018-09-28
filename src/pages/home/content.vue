@@ -16,6 +16,12 @@
                 <div class="summary-content">{{filter(news.summary)}}</div>
             </a-card>
         </div>
+        <div v-if="isLoading" class="content-loading">
+            <div class="loading-icon">
+                <a-spin />
+                <div>加载中</div>
+            </div>
+        </div>
     </div>
 </template>
 <script>
@@ -30,7 +36,13 @@ export default {
         ...mapState({
             list: state => state.content.list,
             url: state => state.content.url,
+            isLoading: state => state.content.isLoading,
         }),
+    },
+    watch: {
+        list(){
+            document.documentElement.scrollTop = document.body.scrollTop = 0;
+        },
     },
     created(){},
     mounted(){},
@@ -49,6 +61,24 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.content-loading{
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255,255,255,.2);
+}
+.loading-icon{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    line-height: 2.4;
+    font-size: 12px;
+    color:cadetblue;
+}
 .content-wrap{
     position: relative;
 }
