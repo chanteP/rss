@@ -2,6 +2,7 @@
 node_modules
 /dist
 yarn.lock
+.npmrc
 
 # local env files
 .env.local
