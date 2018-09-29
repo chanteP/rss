@@ -12,7 +12,7 @@
                 :mode="mode"
                 :theme="theme"
             >
-                <a-menu-item key="home" @click="loadAll">
+                <a-menu-item key="home" @click="fetchAll()">
                     <a-icon type="smile-o" />全部
                 </a-menu-item>
 
@@ -22,7 +22,7 @@
                         {{menu.name}}
                     </a-menu-item>
                     
-                    <a-sub-menu :key="menu.name" v-else>
+                    <a-sub-menu :key="menu.name" v-else @click="fetchAll(menu.children)">
                         <span slot="title"><a-icon :type="menu.icon || 'tags-o'" /><span>{{menu.name}}</span></span>
                         <template v-for="childMenu in menu.children">
                             <a-menu-item :key="menu.name + '|||' + childMenu.name" @click="fetchData(childMenu.source)">{{childMenu.name}}</a-menu-item>
@@ -62,17 +62,17 @@ export default {
         await this.$store.dispatch('sidebar/fetchConfigs', {
             sourceUrl: decodeURIComponent(queryString.parse(window.location.search).url || ''),
         });
-        this.loadAll();
+        this.fetchAll();
     },
     methods: {
-        loadAll(){
+        fetchAll(list){
             let menus = [];
-            this.category.forEach(c => {
-                c.source && menus.push(c.source);
-                c.children && c.children.forEach(cc => {
-                    cc.source && menus.push(cc.source);
-                })
+
+            (list || this.category).forEach(function loop(item){
+                item.source && menus.push(item.source);
+                item.children && item.children.forEach(child => loop(child));
             });
+
             this.$store.dispatch('content/fetchAll', menus);
         },
         fetchData(source){
