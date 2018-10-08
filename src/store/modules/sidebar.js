@@ -1,3 +1,5 @@
+import localforage from 'localforage';
+
 export default {
     namespaced: true,
     state: {
@@ -6,12 +8,16 @@ export default {
     },
     // getters,
     actions: {
-        async fetchConfigs({commit}, opts){
-            let configs = await fetchConfigs(opts);
+        async fetchConfigs({commit}){
+            let configs = await fetchConfigs();
             commit('setConfigs', configs);
         },
         toggle({commit}, opts){
             commit('toggle');
+        },
+        async save({commit, dispatch}, value){
+            await localforage.setItem('rss-menus', value);
+            dispatch('fetchConfigs');
         },
     },
     mutations: {
@@ -24,11 +30,10 @@ export default {
     },
 }
 
-async function fetchConfigs(opts){
-    let {sourceUrl} = opts || {};
-    let menus = sourceUrl && await fetch(sourceUrl).then(rs => rs.json());
-    return menus || {
-        menus: [
+async function fetchConfigs(){
+    let menus = await localforage.getItem('rss-menus');
+    return {
+        menus: menus || [
             {name: '技术', source: '', children: [
                 {name: '掘金前端', source: 'https://rsshub.app/juejin/category/frontend.json'},
                 {name: '掘金本月前端', source: 'https://rsshub.app/juejin/trending/frontend/monthly.json'},

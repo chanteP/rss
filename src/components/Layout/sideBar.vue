@@ -5,34 +5,36 @@
         </div>
         <transition name="spread">
             <a-menu
-                v-if="show || !mobileMode"
+                v-if="ready && (show || !mobileMode)"
                 :style="`min-width:${size};`"
                 class="sidebar"
-                :defaultSelectedKeys="['home']"
+                :defaultSelectedKeys="currentOpen"
+                :defaultOpenKeys="currentOpen"
                 :mode="mode"
                 :theme="theme"
+                ref="menu"
             >
-                <a-menu-item key="home" @click="fetchAll()">
+                <a-menu-item key="/" @click="go('/')">
                     <a-icon type="smile-o" />全部
                 </a-menu-item>
 
                 <template v-for="menu in category">
-                    <a-menu-item :key="menu.name" v-if="!menu.children" @click="fetchData(menu.source)">
+                    <a-menu-item :key="menu.name" v-if="!menu.children" @click="go(`/category/${menu.name}/${encode(menu.source)}`)">
                         <a-icon :type="menu.icon || 'paper-clip'" />
                         {{menu.name}}
                     </a-menu-item>
                     
-                    <a-sub-menu :key="menu.name" v-else @click="fetchAll(menu.children)">
+                    <a-sub-menu :key="menu.name" v-else>
                         <span slot="title"><a-icon :type="menu.icon || 'tags-o'" /><span>{{menu.name}}</span></span>
                         <template v-for="childMenu in menu.children">
-                            <a-menu-item :key="menu.name + '|||' + childMenu.name" @click="fetchData(childMenu.source)">{{childMenu.name}}</a-menu-item>
+                            <a-menu-item :key="childMenu.name" @click="go(`/category/${menu.name}/${childMenu.name}/${encode(childMenu.source)}`)">{{childMenu.name}}</a-menu-item>
                         </template>
                     </a-sub-menu>
                 </template>
 
-                <!-- <a-menu-item key="config">
-                    <a-icon type="setting" />Config
-                </a-menu-item> -->
+                <a-menu-item key="/setting" @click="go('/setting')">
+                    <a-icon type="setting" />设置
+                </a-menu-item>
             </a-menu>
         </transition>
     </div>
@@ -45,8 +47,10 @@ export default {
     props: ['size'],
     data() {
         return {
+            currentOpen: [this.$route.params.category || this.$route.fullPath || '/', this.$route.params.subCategory].filter(d => typeof d === 'string'),
             mode: 'inline',
             theme: 'light',
+            ready: false,
         };
     },
     computed: {
@@ -59,24 +63,13 @@ export default {
     created(){},
     async mounted(){
         document.body.appendChild(this.$el);
-        await this.$store.dispatch('sidebar/fetchConfigs', {
-            sourceUrl: decodeURIComponent(queryString.parse(window.location.search).url || ''),
-        });
-        this.fetchAll();
+        await this.$store.dispatch('sidebar/fetchConfigs');
+        this.ready = true;
     },
     methods: {
-        fetchAll(list){
-            let menus = [];
-
-            (list || this.category).forEach(function loop(item){
-                item.source && menus.push(item.source);
-                item.children && item.children.forEach(child => loop(child));
-            });
-
-            this.$store.dispatch('content/fetchAll', menus);
-        },
-        fetchData(source){
-            this.$store.dispatch('content/fetchList', source);
+        encode: window.encodeURIComponent,
+        go(path){
+            this.$router.push(path);
             this.mobileMode && this.$store.dispatch('sidebar/toggle');
         },
     }
