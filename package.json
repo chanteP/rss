@@ -10,6 +10,8 @@
   "dependencies": {
     "ant-design-vue": "^1.1.2",
     "chalk": "^2.4.1",
+    "jr-qrcode": "^1.1.4",
+    "jsqrcode": "^0.0.7",
     "koa": "^2.5.3",
     "koa-body": "^4.0.4",
     "koa-router": "^7.4.0",

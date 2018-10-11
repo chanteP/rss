@@ -2,15 +2,16 @@
     <div>
         <div style="overflow:hidden;">
             <a-button-group style="float: right;margin: 15px 0;">
-                <a-button @click="setValue('')">
+                <a-button @click="setValue('')" type="danger">
                     <a-icon type="sync" /> 恢复默认推荐
                 </a-button>
-                <a-button>
-                    <a-icon type="" @click="genQr" /> 生成二维码
+
+                <!-- <a-button @click="genQr">
+                    <a-icon type="" /> 生成二维码
                 </a-button>
-                <a-button>
-                    <a-icon type="qrcode" @click="scan" /> 扫码输入
-                </a-button>
+                <a-button @click="scan">
+                    <a-icon type="qrcode" /> 扫码输入
+                </a-button> -->
             </a-button-group>
         </div>
 
@@ -51,6 +52,8 @@
 </template>
 <script>
 import {mapState} from 'vuex';
+// import jsqrcode from 'jsqrcode';
+// import qrcode from 'jr-qrcode';
 
 export default {
     data(){
@@ -89,7 +92,19 @@ export default {
             });
         },
         genQr(){
+            // debugger
+            // console.log(this.category)
 
+            // let qr = qrcode.getQrBase64(JSON.stringify(this.category), {
+            //     // padding       : +this.options.padding,   // 二维码四边空白（默认为10px）
+            //     // width         : +this.options.size,  // 二维码图片宽度（默认为256px）
+            //     // height        : +this.options.size,  // 二维码图片高度（默认为256px）
+            //     correctLevel  : 1,    // 二维码容错level（默认为高） 0123
+            //     reverse       : false,        // 反色二维码，二维码颜色为上层容器的背景颜色
+            //     background    : "#ffffff",    // 二维码背景颜色（默认白色）
+            //     foreground    : "#000000"     // 二维码颜色（默认黑色）
+            // });
+            // let qrUrl = URL.createObjectURL(this.dataURLtoBlob(qr));
         },
         checkSetting(){
             let value;
@@ -110,7 +125,21 @@ export default {
             this.setValue(value);
         },
         scan(){
-
+            // let qrcode = jsqrcode(document.createElement('canvas'));
+            
+            // var filename = __dirname + '/qrcode.png'
+        
+            // var image = new Image()
+            // image.onload = function(){
+            // var result;
+            // try{
+            //     result = qrcode.decode(image);
+            //     console.log('result of qr code: ' + result);
+            // }catch(e){
+            //     console.log('unable to read qr code');
+            // }
+            // }
+            // image.src = filename
         },
     }
 }

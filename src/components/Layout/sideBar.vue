@@ -19,7 +19,7 @@
                 </a-menu-item>
 
                 <template v-for="menu in category">
-                    <a-menu-item :key="menu.name" v-if="!menu.children" @click="go(`/category/${menu.name}/${encode(menu.source)}`)">
+                    <a-menu-item :key="menu.name" v-if="!menu.children || !menu.children.length" @click="go(`/category/${menu.name}/${encode(menu.source)}`)">
                         <a-icon :type="menu.icon || 'paper-clip'" />
                         {{menu.name}}
                     </a-menu-item>
@@ -78,6 +78,9 @@ export default {
 <style lang="scss">
 .mobileMode .sidebar{
     width: 100vw;
+}
+.ant-menu-sub.ant-menu-inline{
+    background: #f0f0f0;
 }
 </style>
 <style lang="scss" scoped>

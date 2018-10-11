@@ -6,13 +6,15 @@
                     <div class="title-link">{{news.title}}</div>
                     <div class="title-link">
                         <span><a-icon type="tag-o" /> {{news.from}}</span>
-                        <span><a-icon type="user" /> {{news.author.name || ''}}</span>
-                        <span><a-icon type="clock-circle-o" /> {{moment(news.date_published).format('YYYY-MM-DD HH:mm')}}</span>
+                        <span v-if="!!news.author.name"><a-icon type="user" /> {{news.author.name}}</span>
+                        <span v-if="!!+news.date_published" ><a-icon type="clock-circle-o"/> {{moment(news.date_published).format('YYYY-MM-DD HH:mm')}}</span>
                     </div>
                 </a>
-                <img v-if="news.image || news.banner_image"
+                <Pic v-if="news.image || news.banner_image"
                     :src="news.image || news.banner_image"
                     slot="cover"
+                    autofit
+                    :ratio="2/1"
                 />
                 <a slot="extra">
                     <a-icon class="title-link" type="paper-clip" />
@@ -90,6 +92,7 @@ export default {
 .cardbox{
     padding: 5px;
     background: #f0f0f0;
+    min-height: 100vh;
 }
 .cardbox.flexbox{
     display: flex;

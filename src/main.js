@@ -8,17 +8,21 @@ import 'ant-design-vue/dist/antd.css';
 Vue.use(Antd);
 import './styles/global.scss';
 import routes from './route';
+import lazy from './utils/lazy';
 
 import Layout from './components/Layout';
 import Loading from './components/Loading';
+import Pic from './components/Pic';
 
 Vue.config.productionTip = false;
 
 Vue.component('Layout', Layout);
 Vue.component('Loading', Loading);
+Vue.component('Pic', Pic);
+Vue.use(lazy);
 
 const router = new VueRouter({
-    mode: 'history',
+    mode: 'hash',
     routes,
     base: __dirname,
 });

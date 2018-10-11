@@ -20,12 +20,16 @@ export default {
         },
         async fetchAll({commit, dispatch}, sourceList){
             commit('setLoading', true, {root: true});
-            let rs = await Promise.all(sourceList.map(l => fetchResources(l)));
-            let list = rs.reduce((d, s) => d.concat(s), []);
-            list.sort((a, b) => {
-                return new Date(a).getTime() > new Date(b).getTime() ? 1 : -1;
-            });
-            dispatch('showList', list);
+            let list = [];
+
+            await Promise.all(sourceList.map(l => {
+                return fetchResources(l).then(r => {
+                    list.push(...r);
+                    dispatch('showList', list);
+                }).catch(e => {
+                    window.console.error(e);
+                });
+            }));
         },
     },
     mutations: {
@@ -40,6 +44,9 @@ export default {
 
 
 async function fetchResources(source){
+    if(!/\.json$/.test(source)){
+        source += '.json';
+    }
     let rs = await fetch(source).then(res => {
         return res.text();
     });
