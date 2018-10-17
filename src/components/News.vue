@@ -33,14 +33,14 @@
 <script>
 import {mapState} from 'vuex';
 import moment from '../utils/moment';
-import lazyload from '../utils/lazy';
+// import lazyload from '../utils/lazy';
 
 export default {
     props: ['news'],
     data(){
         return {
             star: this.news.hasStar,
-            loading: true,
+            loading: false,
         };
     },
     computed: {
@@ -50,10 +50,10 @@ export default {
     },
     created(){},
     mounted() {
-        lazyload.addLazyItem(this);
+        // lazyload.addLazyItem(this);
     },
     beforeDestroy() {
-        lazyload.removeLazyItem(this);
+        // lazyload.removeLazyItem(this);
     },
     methods: {
         moment,
