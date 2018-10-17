@@ -5,6 +5,7 @@ export default {
     state: {
         configs: {},
         show: false,
+        countMap: new Map(),
     },
     // getters,
     actions: {
@@ -34,14 +35,17 @@ export default {
             // 设计缺陷。。。sidebar不应该这么折腾
             let menus = state.configs.menus;
             menus.forEach(function check(menu){
+                let count = 0;
                 if(menu.source && menu.source === source){
-                    menu.count = length || 0;
+                    count = length || 0;
+                    state.countMap.set(menu, count);
                 }
                 if(menu.children && menu.children.length){
                     menu.children.forEach(check);
-                    menu.count = menu.children.map(m => +m.count || 0).reduce((d, s) => d + s, 0);
+                    count = menu.children.map(m => +state.countMap.get(m) || 0).reduce((d, s) => d + s, 0);
+                    state.countMap.set(menu, count);
                 }
-                console.log(menu.name, menu.count)
+                console.log(menu.name, count)
             });
         },
     },

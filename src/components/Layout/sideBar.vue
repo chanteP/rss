@@ -22,18 +22,18 @@
                     <a-menu-item :key="menu.name" v-if="!menu.children || !menu.children.length" @click="go(`/category/${menu.name}/${encode(menu.source)}`)">
                         <a-icon :type="menu.icon || 'paper-clip'" />
                         {{menu.name}}
-                        <a-tag color="orange" class="tag-count" v-if="menu.count">{{menu.count}}</a-tag>
+                        <a-tag color="orange" class="tag-count" v-if="countMap.get(menu)">{{countMap.get(menu)}}</a-tag>
                     </a-menu-item>
                     
                     <a-sub-menu :key="menu.name" v-else>
                         <span slot="title"><a-icon :type="menu.icon || 'tags-o'" />
                             <span>{{menu.name}}</span>
-                            <a-tag color="orange" class="tag-count" v-if="menu.count">{{menu.count}}</a-tag>
+                            <a-tag color="orange" class="tag-count" v-if="countMap.get(menu)">{{countMap.get(menu)}}</a-tag>
                         </span>
                         <template v-for="childMenu in menu.children">
                             <a-menu-item :key="childMenu.name" @click="go(`/category/${menu.name}/${childMenu.name}/${encode(childMenu.source)}`)">
                                 {{childMenu.name}}
-                                <a-tag color="orange" class="tag-count" v-if="childMenu.count">{{childMenu.count}}</a-tag>
+                                <a-tag color="orange" class="tag-count" v-if="countMap.get(childMenu)">{{countMap.get(childMenu)}}</a-tag>
                             </a-menu-item>
                         </template>
                     </a-sub-menu>
@@ -66,6 +66,7 @@ export default {
     computed: {
         ...mapState({
             category: state => state.sidebar.configs.menus,
+            countMap: state => state.sidebar.countMap,
             mobileMode: state => state.mobileMode,
             show: state => state.sidebar.show,
         }),
