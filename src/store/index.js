@@ -5,6 +5,7 @@ Vue.use(vuex);
 import content from './modules/content';
 import sidebar from './modules/sidebar';
 import setting from './modules/setting';
+import star from './modules/star';
 
 let globalStore;
 
@@ -13,6 +14,7 @@ export default globalStore = new vuex.Store({
         content,
         sidebar,
         setting,
+        star,
     },
     state: {
         mobileMode: window.innerWidth / window.innerHeight < 1,

@@ -16,6 +16,7 @@ export default {
         async fetchList({commit, dispatch}, source){
             commit('setLoading', true, {root: true});
             let list = await fetchResources(source);
+            dispatch('sidebar/refreshCount', {source, length: list.length}, {root: true});
             dispatch('showList', list);
         },
         async fetchAll({commit, dispatch}, sourceList){
@@ -25,6 +26,7 @@ export default {
             await Promise.all(sourceList.map(l => {
                 return fetchResources(l).then(r => {
                     list.push(...r);
+                    dispatch('sidebar/refreshCount', {source: l, length: r.length}, {root: true});
                     dispatch('showList', list);
                 }).catch(e => {
                     window.console.error(e);

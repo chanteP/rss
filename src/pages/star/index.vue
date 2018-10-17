@@ -8,6 +8,7 @@
                         <span><a-icon type="tag-o" /> {{news.from}}</span>
                         <span v-if="!!news.author.name"><a-icon type="user" /> {{news.author.name}}</span>
                         <span v-if="!!news.date_published" ><a-icon type="clock-circle-o"/> {{moment(news.date_published).format('YYYY-MM-DD HH:mm')}}</span>
+                        <span v-if="!!+news.starDate" ><a-icon type="star-o"/> {{moment(news.starDate).format('YYYY-MM-DD HH:mm')}}</span>
                     </div>
                 </a>
                 <Pic v-if="news.image || news.banner_image"
@@ -18,8 +19,8 @@
                     @click.native="toLink(news.url)"
                 />
                 <a slot="extra">
-                    <a-icon class="title-link star enable" type="star" v-if="news.hasStar" />
-                    <a-icon class="title-link star" type="star-o" v-else @click="starIt(news)"  />
+                    <a-icon class="title-link star enable" type="star" v-if="news.hasStar" @click="news.hasStar = true;$store.dispatch('star/remove', news)"  />
+                    <a-icon class="title-link star" type="star-o" v-else/>
                 </a>
                 <div class="summary-content" @click="toLink(news.url)">
                     <a-icon class="title-link clip-link" type="paper-clip" />
@@ -39,25 +40,15 @@ export default {
     },
     computed: {
         ...mapState({
-            list: state => state.content.list,
-            url: state => state.content.url,
+            list: state => state.star.list,
             mobileMode: state => state.mobileMode,
-            category: state => state.sidebar.configs.menus,
         }),
     },
     watch: {
-        category(){
-            this.checkFetch(this.$route);
-        },
-        $route(to, from){
-            this.checkFetch(to);
-        },
-        list(){
-            document.documentElement.scrollTop = document.body.scrollTop = 0;
-        },
     },
     created(){},
     mounted(){
+        this.$store.dispatch('star/fetchStars');
     },
     methods: {
         moment,
@@ -69,28 +60,6 @@ export default {
         },
         toLink(url){
             window.open(url, '_blank');
-        },
-        starIt(news){
-            news.hasStar = true;
-            this.$store.dispatch('star/add', news);
-        },
-        checkFetch(route){
-            route.params.source ? 
-                this.fetchData(route.params.source) :
-                this.fetchAll();
-        },
-        fetchAll(list){
-            let menus = [];
-
-            (list || this.category).forEach(function loop(item){
-                item.source && menus.push(item.source);
-                item.children && item.children.forEach(child => loop(child));
-            });
-
-            this.$store.dispatch('content/fetchAll', menus);
-        },
-        fetchData(source){
-            this.$store.dispatch('content/fetchList', source);
         },
     }
 }

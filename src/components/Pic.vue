@@ -71,6 +71,7 @@ export default {
         },
     },
     beforeDestroy() {
+        window.removeEventListener('resize', this.checkHeight);
         lazyload.removeLazyItem(this);
     },
     methods: {

@@ -19,6 +19,9 @@ export default {
             await localforage.setItem('rss-menus', value);
             dispatch('fetchConfigs');
         },
+        refreshCount({commit, dispatch}, {source, length}){
+            commit('setCount', {source, length});
+        },
     },
     mutations: {
         setConfigs(state, value){
@@ -26,6 +29,19 @@ export default {
         },
         toggle(state){
             state.show = !state.show;
+        },
+        setCount(state, {source, length}){
+            // 设计缺陷。。。sidebar不应该这么折腾
+            let menus = state.configs.menus;
+            menus.forEach(function check(menu){
+                if(menu.source && menu.source === source){
+                    menu.count = length || 0;
+                }
+                if(menu.children && menu.children.length){
+                    menu.children.forEach(check);
+                    // menu.count = menu.children.map(m => +m.count || 0).reduce((d, s) => d + s, 0);
+                }
+            });
         },
     },
 }

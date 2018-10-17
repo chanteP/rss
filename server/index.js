@@ -13,6 +13,7 @@ const app = new koa;
 const pages = new router;
 
 app.use(async(ctx, next) => {
+    debugger
     let pvData = {
         time: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
         url: ctx.path,
