@@ -39,8 +39,9 @@ export default {
                 }
                 if(menu.children && menu.children.length){
                     menu.children.forEach(check);
-                    // menu.count = menu.children.map(m => +m.count || 0).reduce((d, s) => d + s, 0);
+                    menu.count = menu.children.map(m => +m.count || 0).reduce((d, s) => d + s, 0);
                 }
+                console.log(menu.name, menu.count)
             });
         },
     },

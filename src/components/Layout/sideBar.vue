@@ -26,7 +26,10 @@
                     </a-menu-item>
                     
                     <a-sub-menu :key="menu.name" v-else>
-                        <span slot="title"><a-icon :type="menu.icon || 'tags-o'" /><span>{{menu.name}}</span></span>
+                        <span slot="title"><a-icon :type="menu.icon || 'tags-o'" />
+                            <span>{{menu.name}}</span>
+                            <a-tag color="orange" class="tag-count" v-if="menu.count">{{menu.count}}</a-tag>
+                        </span>
                         <template v-for="childMenu in menu.children">
                             <a-menu-item :key="childMenu.name" @click="go(`/category/${menu.name}/${childMenu.name}/${encode(childMenu.source)}`)">
                                 {{childMenu.name}}

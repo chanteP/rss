@@ -1,6 +1,6 @@
 <template>
     <div class="setting-wrap">
-        <h2>感谢<a href="https://docs.rsshub.app/#%E9%B8%A3%E8%B0%A2">RSSHub</a></h2>
+        <h2>感谢<a href="https://docs.rsshub.app/#%E9%B8%A3%E8%B0%A2" target="_blank">RSSHub</a></h2>
         <a-collapse defaultActiveKey="menuSetting">
             <a-collapse-panel key="menuSetting" header="菜单配置修改">
                 <menuSetting />

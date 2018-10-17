@@ -1,3 +1,4 @@
+import storage from '../../utils/storage';
 export default {
     namespaced: true,
     state: {
@@ -49,9 +50,14 @@ async function fetchResources(source){
     if(!/\.json$/.test(source)){
         source += '.json';
     }
-    let rs = await fetch(source).then(res => {
+    let cacheKey = `rss-source:${source}`;
+    let cache = storage.get(cacheKey);
+    let rs = cache || await fetch(source).then(res => {
         return res.text();
     });
+    if(rs && !cache){
+        storage.set(cacheKey, rs, cache, 1 * 3600 * 1000);
+    }
     rs = rs.replace(/\\/g, '\\\\');
     let resInfo = {items: []};
     try{

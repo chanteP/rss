@@ -22,6 +22,7 @@ export default {
             commit('push', news);
         },
         async remove({commit, dispatch}, news){
+            await dispatch('fetchStars');
             news.hasStar = false;
             commit('remove', news);
         },
