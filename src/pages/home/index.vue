@@ -1,5 +1,6 @@
 <template>
     <div class="content-wrap">
+        <div v-if="!isLoading && !list.length" class="empty-tips">这里啥都没有</div>
         <div class="cardbox" :class="{flexbox: !mobileMode}">
             <News v-for="(news, index) in list" :key="`${news.from}_${news.url}_${index}`" :news="news" />
         </div>
@@ -21,6 +22,7 @@ export default {
     },
     computed: {
         ...mapState({
+            isLoading: state => state.isLoading,
             list: state => state.content.list,
             url: state => state.content.url,
             mobileMode: state => state.mobileMode,
@@ -68,11 +70,15 @@ export default {
 }
 .cardbox{
     padding: 5px;
-    background: #f0f0f0;
-    min-height: 100vh;
 }
 .cardbox.flexbox{
     display: flex;
     flex-wrap: wrap;
+}
+.empty-tips{
+    line-height: 100px;
+    color: #999;
+    text-align: center;
+    font-size: 12px;
 }
 </style>

@@ -45,76 +45,17 @@ export default {
                     count = menu.children.map(m => +state.countMap.get(m) || 0).reduce((d, s) => d + s, 0);
                     state.countMap.set(menu, count);
                 }
-                console.log(menu.name, count)
             });
         },
     },
 }
 
 async function fetchConfigs(){
-    let menus = await localforage.getItem('rss-menus');
+    let [menus, recommendMenus] = await Promise.all([
+        localforage.getItem('rss-menus'),
+        fetch('/recommend.json').then(res => res.text()).then(rs => eval(rs)),
+    ]); 
     return {
-        menus: menus || [
-            {
-                "name": "技术",
-                "source": "",
-                "icon": "github",
-                "children": [
-                    {
-                        "name": "掘金前端",
-                        "source": "https://rsshub.app/juejin/category/frontend.json"
-                    },
-                    {
-                        "name": "掘金本月前端",
-                        "source": "https://rsshub.app/juejin/trending/frontend/monthly.json"
-                    },
-                    {
-                        "name": "V2EX",
-                        "source": "https://rsshub.app/v2ex/topics/latest.json"
-                    },
-                    {
-                        "name": "V2EX最热",
-                        "source": "https://rsshub.app/v2ex/topics/hot.json"
-                    },
-                    {
-                        "name": "gitlab",
-                        "source": "https://rsshub.app/gitlab/explore/trending.json"
-                    }
-                ]
-            },
-            {
-                "name": "逼乎收藏",
-                "source": "",
-                "icon": "zhihu",
-                "children": [
-                    {
-                        "name": "知乎看热闹",
-                        "source": "https://rsshub.app/zhihu/collection/100960447.json"
-                    },
-                    {
-                        "name": "装逼指南",
-                        "source": "https://rsshub.app/zhihu/collection/71859050.json"
-                    },
-                    {
-                        "name": "有空再看",
-                        "source": "https://rsshub.app/zhihu/collection/32147143.json"
-                    },
-                ]
-            },
-            {
-                "name": "新番",
-                "source": "",
-                "icon": "youtube",
-                "children": [
-                ]
-            },
-            {
-                "name": "大新闻",
-                "source": "",
-                "icon": "profile",
-                "children": [
-                ]
-            },
-        ],
+        menus: menus || recommendMenus,
     }
 }
