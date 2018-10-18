@@ -6,6 +6,7 @@ export default {
         configs: {},
         show: false,
         countMap: new Map(),
+        sourceCountMap: {},
     },
     // getters,
     actions: {
@@ -39,12 +40,18 @@ export default {
                 if(menu.source && menu.source === source){
                     count = length || 0;
                     state.countMap.set(menu, count);
+                    state.sourceCountMap[menu.name + menu.source] = +count || 0;
                 }
                 if(menu.children && menu.children.length){
                     menu.children.forEach(check);
-                    count = menu.children.map(m => +state.countMap.get(m) || 0).reduce((d, s) => d + s, 0);
+                    count = menu.children.map(m => {
+                        +state.countMap.get(m) || 0;
+                        return +state.sourceCountMap[m.name + m.source] || 0;
+                    }).reduce((d, s) => d + s, 0);
                     state.countMap.set(menu, count);
+                    state.sourceCountMap[menu.name + menu.source] = count;
                 }
+                // console.log(state.sourceCountMap);
             });
         },
     },
