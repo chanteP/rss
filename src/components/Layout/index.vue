@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="main-wrap">
         <sidebar :class="{mobileMode}" :size="sidebarWidth" />
         <top-nav :class="{mobileMode}" :size="topNavHeight" :style="`left:${sidebarWidth};height:${topNavHeight};`" />
         <div class="content" :style="`margin-left:${sidebarWidth};margin-top:${topNavHeight};`" >
@@ -44,6 +44,16 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.main-wrap{
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
 .content{
     position: relative;
     min-height: 100vh;

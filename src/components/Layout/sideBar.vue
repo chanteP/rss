@@ -119,9 +119,12 @@ export default {
     box-sizing: border-box;
 }
 .sidebar{
+    box-sizing: border-box;
     height: 100vh;
+    padding-bottom: 100px;
     overflow-x: hidden;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .spread-enter-active, .spread-leave-active {

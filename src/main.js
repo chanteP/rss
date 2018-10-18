@@ -16,6 +16,9 @@ import Layout from './components/Layout';
 import Loading from './components/Loading';
 import Pic from './components/Pic';
 
+import preventBounceScroll from './utils/preventBounceScroll';
+window.preventBounceScroll = /\bi(mac|phone|pad|pod)/i.test(window.navigator.userAgent) && preventBounceScroll.config().bind();
+
 Vue.config.productionTip = false;
 
 Vue.component('Layout', Layout);
