@@ -8,6 +8,7 @@
                 v-if="ready && (show || !mobileMode)"
                 :style="`min-width:${size};`"
                 class="sidebar"
+                v-model="current"
                 :defaultSelectedKeys="currentOpen"
                 :defaultOpenKeys="currentOpen"
                 :mode="mode"
@@ -61,6 +62,8 @@ export default {
             mode: 'inline',
             theme: 'light',
             ready: false,
+
+            current: [],
         };
     },
     computed: {
