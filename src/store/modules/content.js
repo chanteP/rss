@@ -64,7 +64,7 @@ async function fetchResources(source){
         rs = await fetch(source).then(res => {
             return res.text();
         });
-        rs && storage.set(cacheKey, rs, cache, 0.25 * 3600 * 1000);
+        rs && storage.set(cacheKey, rs, 0.25 * 3600 * 1000);
     }
     rs = rs.replace(/\\/g, '\\\\');
     let resInfo = {items: []};
