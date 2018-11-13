@@ -5,8 +5,8 @@
             <slot name="tags">
                 <div class="title-link">
                     <span><a-icon type="tag-o" /> {{news.from}}</span>
-                    <span v-if="!!news.author.name"><a-icon type="user" /> {{news.author.name}}</span>
-                    <span v-if="!!news.date_published" ><a-icon type="clock-circle-o"/> {{moment(news.date_published).format('YYYY-MM-DD HH:mm')}}</span>
+                    <span v-if="!!news.author"><a-icon type="user" /> {{news.author.name || news.author}}</span>
+                    <span v-if="!!news.pubDate" ><a-icon type="clock-circle-o"/> {{moment(new Date(news.pubDate)).format('YYYY-MM-DD HH:mm')}}</span>
                     <span v-if="!!+news.starDate" ><a-icon type="star-o"/> {{moment(news.starDate).format('YYYY-MM-DD HH:mm')}}</span>
                 </div>
             </slot>
@@ -26,7 +26,7 @@
         </a>
         <div class="summary-content" @click="toLink(news.url, $event)">
             <a-icon class="title-link clip-link" type="paper-clip" />
-            {{news.content_text || filter(news.summary)}}
+            {{news.content_text || filter(news.summary || news.description)}}
         </div>
     </a-card>
 </template>
@@ -48,7 +48,8 @@ export default {
             mobileMode: state => state.mobileMode,
         }),
     },
-    created(){},
+    created(){
+    },
     mounted() {
         // lazyload.addLazyItem(this);
     },

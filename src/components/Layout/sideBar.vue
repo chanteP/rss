@@ -41,7 +41,7 @@
                 </template>
 
                 <a-menu-item key="/star" @click="go('/star')">
-                    <a-icon type="star-o"/>收藏
+                    <a-icon type="star-o"/>收藏(demo)
                 </a-menu-item>
                 <a-menu-item key="/setting" @click="go('/setting')">
                     <a-icon type="setting" />设置

@@ -1,4 +1,8 @@
 import storage from '../../utils/storage';
+import {parseString as xmlParser} from 'xml2js';
+
+const enableCache = false;
+
 export default {
     namespaced: true,
     state: {
@@ -46,13 +50,14 @@ export default {
 
 
 async function fetchResources(source){
-    if(!/\.json$/.test(source)){
-        source += '.json';
+    if(/\.json$/.test(source)){
+        // source += '.json';
+        source = source.replace(/\.json$/i, '');
     }
     let cacheKey = `rss-source:${source}`;
     let cache = storage.get(cacheKey);
     let rs
-    if(cache){
+    if(enableCache && cache){
         rs = await new Promise(res => {
             // 就为了好看，怎么了
             setTimeout(_ => {
@@ -64,16 +69,11 @@ async function fetchResources(source){
         rs = await fetch(source).then(res => {
             return res.text();
         });
-        rs && storage.set(cacheKey, rs, 0.25 * 3600 * 1000);
+        rs = rs && await parseXML(rs) || rs;
+        rs && enableCache && storage.set(cacheKey, rs, 0.25 * 3600 * 1000);
     }
-    rs = rs.replace(/\\/g, '\\\\');
-    let resInfo = {items: []};
-    try{
-        resInfo = JSON.parse(rs);
-    }catch(e){
-        window.console.error(source, e);
-    }
-    let list = resInfo.items || [];
+    let resInfo = rs || {item: []};
+    let list = resInfo.item || [];
     list.forEach(item => {
         // 来源标记
         item.from = resInfo.title;
@@ -84,3 +84,13 @@ async function fetchResources(source){
     })
     return list;
 }
+
+async function parseXML(content){
+    let parseString = xmlParser;
+    return await new Promise((res, rej) => {
+        parseString(content, {explicitArray: false}, function (err, result) {
+            err ? rej(err) : res(result && result.rss.channel || null);
+        });
+    });
+}
+
