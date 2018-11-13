@@ -1,7 +1,7 @@
 <template>
     <a-card class="card" :class="{flex: !mobileMode}" :loading="loading">
         <a slot="title">
-            <div class="title-link nowrap" @click="toLink(news.url, $event)">{{news.title}}</div>
+            <div class="title-link nowrap" @click="toLink(news.url || news.link, $event)">{{news.title}}</div>
             <slot name="tags">
                 <div class="title-link">
                     <span><a-icon type="tag-o" /> {{news.from}}</span>
@@ -16,7 +16,7 @@
             slot="cover"
             autofit
             :ratio="0/1"
-            @click.native="toLink(news.url, $event)"
+            @click.native="toLink(news.url || news.link, $event)"
         />
         <a slot="extra">
             <slot name="tags">
@@ -24,7 +24,7 @@
                 <a-icon class="title-link star" type="star-o" v-else @click="starIt(news, true)"  />
             </slot>
         </a>
-        <div class="summary-content" @click="toLink(news.url, $event)">
+        <div class="summary-content" @click="toLink(news.url || news.link, $event)">
             <a-icon class="title-link clip-link" type="paper-clip" />
             {{news.content_text || filter(news.summary || news.description)}}
         </div>
@@ -49,6 +49,7 @@ export default {
         }),
     },
     created(){
+        console.log(this.news)
     },
     mounted() {
         // lazyload.addLazyItem(this);
