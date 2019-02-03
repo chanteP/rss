@@ -1,7 +1,5 @@
 # rsshub
 
-[http://rss.neetproject.com](http://rss.neetproject.com)
-
 ## Project setup
 ```
 yarn install

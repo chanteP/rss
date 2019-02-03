@@ -67,7 +67,7 @@ export default {
         },
         toLink(url, e){
             e.preventDefault();
-            window.open(url, '_blank');
+            (window.$open || window.open)(url, '_blank');
         },
         starIt(news, bool){
             this.star = news.hasStar = bool;

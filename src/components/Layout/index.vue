@@ -8,17 +8,20 @@
                 <slot></slot>
             </transition>
         </div>
+        <webview :class="mobileMode" />
     </div>
 </template>
 <script>
 import sidebar from './sideBar';
 import topNav from './topNav';
+import webview from './webview';
 import {mapState} from 'vuex';
 
 export default {
     components: {
         sidebar,
         topNav,
+        webview,
     },
     data(){
         return {
