@@ -1,4 +1,4 @@
-const apiFrom = 'https://rsshub.app/api/routes/';
+const apiFrom = 'http://localhost:9000/api/api/routes/';
 
 export default {
     namespaced: true,
